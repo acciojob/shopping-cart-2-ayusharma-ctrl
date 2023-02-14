@@ -1,42 +1,48 @@
 //your code here
-var addButton = document.getElementById('add');
-var itemName = document.getElementById('item-name-input')
-var itemPrice = document.getElementById('item-price-input')
-var table = document.getElementById('table')
-var sum = document.getElementById('sum')
+var itemName = document.getElementById("item-name-input");
+var itemPrice = document.getElementById("item-price-input");
 
-addButton.innerText = 'Add';
+var tbody = document.querySelector("tbody");
 
-function addToTable(){
-    // 1. get the values entered by a user
-    var userDataName = itemName.value;
-    var userDataPrice = itemPrice.value;
-    
-    // 2. check whether values are entered or not
-    if(userDataName != '' && userDataPrice != '' ){
+var grandTotal = document.getElementById("total");
+var totalSoFar = 0;
 
-        // 3. Create a new Row at the top
-        var row = table.insertRow(0);
+var addItem = document.querySelector("#add");
 
-        // 4. Create the cells
-        var td1 = row.insertCell(0);
-        var td2 = row.insertCell(1);
+addItem.addEventListener("click", (event) => {
+  // otherwise it will submit the form
+  event.preventDefault();
+  // invalid values
+  var nameValue = itemName.value.trim();
+  var priceValue = itemPrice.value;
+  if (nameValue.length == 0 || itemPrice <= 0) return;
 
-        // Set attribute "ID" as per te question
-        td1.setAttribute("id", "item");
-        td2.setAttribute("id", "price");
+  let newRow = document.createElement("tr");
 
-        // 5. put the values inside the empty cells
-        td1.innerText = userDataName;
-        td2.innerText = userDataPrice;
+  let name = document.createElement("td");
+  name.innerText = itemName.value;
+  name.setAttribute("data-ns-test", "item-name");
 
-        // 6. print the grand total
-        sum.innerText =  Number(sum.innerText) + Number(td2.innerText);
+  newRow.append(name);
 
-        // 7. Clear the text field
-        itemName.value = '' ;
-        itemPrice.value = '' ;
-    }
-}
+  let price = document.createElement("td");
+  price.innerText = itemPrice.value;
+  price.setAttribute("data-ns-test", "item-price");
 
-addButton.onclick = addToTable;
+  newRow.append(price);
+
+  // is valid item
+  if (itemName.value && itemPrice.value) {
+    let total = document.createElement("td");
+    total.innerText = priceValue;
+
+    tbody.append(newRow);
+
+    totalSoFar += Number(total.innerText);
+    grandTotal.innerText = totalSoFar;
+  }
+
+  // reset
+  itemName.value = "";
+  itemPrice.value = "";
+});
